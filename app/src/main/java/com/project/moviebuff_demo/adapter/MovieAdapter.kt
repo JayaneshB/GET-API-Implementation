@@ -55,17 +55,17 @@ class MovieAdapter(private val movies: List<Movie> , private val clickHandler:On
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bindMovie(movies[position])
+        val movie = movies[position]
+        holder.bindMovie(movie)
 
         holder.itemView.setOnClickListener(object : View.OnClickListener {
 
             override fun onClick(view: View?) {
 
                 val activity = holder.itemView.context as AppCompatActivity
-//                val fragment = MovieFragment.newInstance("overrsr")
-                val fragment = MovieFragment()
+                val fragment = MovieFragment.newInstance(movie.movie_overview,movie.original_title,movie.poster_path)
                 val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.main, fragment).commit()
+                fragmentTransaction.replace(R.id.main,fragment).commit()
             }
         })
     }
