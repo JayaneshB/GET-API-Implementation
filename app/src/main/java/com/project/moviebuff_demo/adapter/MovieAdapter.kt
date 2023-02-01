@@ -13,16 +13,15 @@ import com.project.moviebuff_demo.Interface.OnClickHandler
 import com.project.moviebuff_demo.R
 import com.project.moviebuff_demo.models.Movie
 
-class MovieAdapter(private val movies: List<Movie> , private val clickHandler:OnClickHandler) :
+class MovieAdapter(private val movies: List<Movie>, private val clickHandler: OnClickHandler) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-     inner class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         init {
             view.setOnClickListener(this)
         }
 
-
-        private val Image_URL = "https://image.tmdb.org/t/p/w500/"
+        private val imageURL = "https://image.tmdb.org/t/p/w500/"
 
         fun bindMovie(movie: Movie) {
 
@@ -36,7 +35,7 @@ class MovieAdapter(private val movies: List<Movie> , private val clickHandler:On
             /**
              * Glide is used for loading the images from the API to the view
              */
-            Glide.with(itemView).load(Image_URL + movie.poster_path).into(poster)
+            Glide.with(itemView).load(imageURL + movie.poster_path).into(poster)
 
         }
 
@@ -58,16 +57,14 @@ class MovieAdapter(private val movies: List<Movie> , private val clickHandler:On
         val movie = movies[position]
         holder.bindMovie(movie)
 
-        holder.itemView.setOnClickListener(object : View.OnClickListener {
-
-            override fun onClick(view: View?) {
-
-                val activity = holder.itemView.context as AppCompatActivity
-                val fragment = MovieFragment.newInstance(movie.movie_overview,movie.original_title,movie.poster_path)
-                val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.main,fragment).commit()
-            }
-        })
+        holder.itemView.setOnClickListener {
+            val activity = holder.itemView.context as AppCompatActivity
+            val fragment = MovieFragment.newInstance(
+                movie.movie_overview, movie.original_title, movie.poster_path
+            )
+            val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.main, fragment).addToBackStack(null).commit()
+        }
     }
 
     override fun getItemCount(): Int {
