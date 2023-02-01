@@ -5,14 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.project.moviebuff_demo.Fragment.MovieFragment
+import com.project.moviebuff_demo.Interface.OnClickHandler
 import com.project.moviebuff_demo.R
 import com.project.moviebuff_demo.models.Movie
 
-class MovieAdapter(private val movies: List<Movie>) :
+class MovieAdapter(private val movies: List<Movie> , private val clickHandler:OnClickHandler) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-    class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+     inner class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+
+        init {
+            view.setOnClickListener(this)
+        }
+
 
         private val Image_URL = "https://image.tmdb.org/t/p/w500/"
 
@@ -32,6 +40,12 @@ class MovieAdapter(private val movies: List<Movie>) :
 
         }
 
+        override fun onClick(v: View?) {
+
+            val pos = movies[bindingAdapterPosition]
+            clickHandler.onClick(pos)
+
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -41,10 +55,23 @@ class MovieAdapter(private val movies: List<Movie>) :
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bindMovie(movies.get(position))
+        holder.bindMovie(movies[position])
+
+        holder.itemView.setOnClickListener(object : View.OnClickListener {
+
+            override fun onClick(view: View?) {
+
+                val activity = holder.itemView.context as AppCompatActivity
+//                val fragment = MovieFragment.newInstance("overrsr")
+                val fragment = MovieFragment()
+                val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.main, fragment).commit()
+            }
+        })
     }
 
     override fun getItemCount(): Int {
         return movies.size
     }
+
 }
