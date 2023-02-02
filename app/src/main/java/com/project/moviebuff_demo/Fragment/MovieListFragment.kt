@@ -44,12 +44,12 @@ class MovieListFragment : Fragment(),OnClickHandler {
             if (movies.isNotEmpty()) {
                 binding.rvMovieList.adapter = MovieAdapter(movies,this@MovieListFragment)
             } else {
-                Log.e("MovieListFragment", "Error: movieResponse is null")
+                Log.e(TAG, "Error: movieResponse is null")
             }
         }
     }
 
-    fun getMovieData(callback: (List<Movie>) -> Unit) {
+    private fun getMovieData(callback: (List<Movie>) -> Unit) {
         val apiService = ApiService.getInstance().create(ApiInterface::class.java)
         apiService.getMovieList().enqueue(object : Callback<MovieResponse> {
             override fun onResponse(
@@ -59,7 +59,7 @@ class MovieListFragment : Fragment(),OnClickHandler {
                 if (response.body() != null) {
                     return callback(response.body()!!.movie)
                 } else {
-                    Log.e("MovieListFragment", "Error: movieResponse is null")
+                    Log.e(TAG, "Error: movieResponse is null")
                 }
             }
 

@@ -5,4 +5,9 @@
     <string name="add_to_wishlist">Add to wishlist</string>
     <string name="story_line">Story Line</string>
     <string name="movie_title">Movie Title</string>
+    <string name="added">Added !!</string>
+    <string name="movie_catalog">Movies</string>
+    <string name="popular_movies_title">Popular Movies</string>
+    <string name="movie_name">Movie Name</string>
+    <string name="release_date">Release Date</string>
 </resources>

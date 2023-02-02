@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.project.moviebuff_demo.R
 import com.project.moviebuff_demo.databinding.FragmentMovieBinding
 
 
@@ -52,18 +53,30 @@ class MovieFragment : Fragment() {
 
          */
 
+        /**
+         *  Added the required detail of the movie
+         *  with respect to fields using bundles
+         */
+
         binding.fragmentTvTitle.text = arguments?.getString(TITLE)
         binding.fragmentOverview.text = arguments?.getString(STORYLINE)
 
         val poster = binding.fragmentImage
         Glide.with(this).load(imageURL + arguments?.getString(POSTER)).into(poster)
 
+        /**
+         *  Performed onclick event for the button
+         */
+
 
         binding.wishListButton.setOnClickListener {
-//            Toast.makeText(requireContext(), "Added to wishlist", Toast.LENGTH_SHORT).show()
+
+            binding.wishListButton.text = resources.getString(R.string.added)
+            binding.wishListButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check,0)
 
             Snackbar.make(requireView(), "Added to wishlist", Snackbar.LENGTH_SHORT).show()
             Handler().postDelayed({ parentFragmentManager.popBackStack() }, 3000)
+
         }
 
         return binding.root

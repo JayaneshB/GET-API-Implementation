@@ -15,7 +15,4 @@ data class Movie(
     @SerializedName("overview")
     val movie_overview: String,
 
-):Parcelable {
-
-//    constructor() : this("","","","")
-}
+):Parcelable

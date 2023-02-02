@@ -8,6 +8,5 @@ interface ApiInterface {
 
     @GET("/3/movie/popular?api_key=72feba6dc1a2eda1297a8f778e2eb1d1")
     fun getMovieList() : Call<MovieResponse>
-    fun getMovieDetails() : Call<MovieResponse>
 
 }

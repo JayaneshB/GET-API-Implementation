@@ -11,5 +11,6 @@
     <color name="dark_grey">#2D2D2D</color>
     <color name="orange">#fc5003</color>
     <color name="orangish_yellow">#FFA500</color>
+    <color name="yellow">#FFD700</color>
     
 </resources>
