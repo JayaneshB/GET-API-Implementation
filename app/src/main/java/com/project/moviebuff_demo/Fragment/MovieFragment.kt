@@ -1,6 +1,5 @@
 package com.project.moviebuff_demo.Fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -9,8 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.project.moviebuff_demo.R
-import com.project.moviebuff_demo.R.style.SnackbarCustomStyle
 import com.project.moviebuff_demo.databinding.FragmentMovieBinding
 
 
@@ -40,15 +37,12 @@ class MovieFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         // Inflate the layout for this fragment
         binding = FragmentMovieBinding.inflate(inflater, container, false)
-
-
         /**
          * Checking the value with log.
 
@@ -62,7 +56,7 @@ class MovieFragment : Fragment() {
         binding.fragmentOverview.text = arguments?.getString(STORYLINE)
 
         val poster = binding.fragmentImage
-        Glide.with(this).load(imageURL+arguments?.getString(POSTER)).into(poster)
+        Glide.with(this).load(imageURL + arguments?.getString(POSTER)).into(poster)
 
 
         binding.wishListButton.setOnClickListener {
@@ -72,9 +66,6 @@ class MovieFragment : Fragment() {
             Handler().postDelayed({ parentFragmentManager.popBackStack() }, 3000)
         }
 
-
         return binding.root
-
     }
-
 }

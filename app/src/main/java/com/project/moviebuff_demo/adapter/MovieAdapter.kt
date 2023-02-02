@@ -46,16 +46,19 @@ class MovieAdapter(private val movies: List<Movie>, private val clickHandler: On
 
         }
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
         )
     }
-
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = movies[position]
         holder.bindMovie(movie)
+
+        /**
+         *  On clicking the view it redirects to the new
+         *  fragment of the selected view
+         */
 
         holder.itemView.setOnClickListener {
             val activity = holder.itemView.context as AppCompatActivity
@@ -70,5 +73,4 @@ class MovieAdapter(private val movies: List<Movie>, private val clickHandler: On
     override fun getItemCount(): Int {
         return movies.size
     }
-
 }

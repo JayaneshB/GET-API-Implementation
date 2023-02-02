@@ -17,5 +17,5 @@ data class Movie(
 
 ):Parcelable {
 
-    constructor() : this("","","","")
+//    constructor() : this("","","","")
 }

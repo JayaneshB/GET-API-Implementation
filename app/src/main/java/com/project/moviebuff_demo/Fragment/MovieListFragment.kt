@@ -29,7 +29,7 @@ class MovieListFragment : Fragment(),OnClickHandler {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMovieListBinding.inflate(inflater, container, false)
         return binding.root
     }
