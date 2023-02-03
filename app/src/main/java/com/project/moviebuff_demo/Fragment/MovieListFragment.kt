@@ -49,7 +49,6 @@ class MovieListFragment : Fragment(), OnClickHandler {
             this.rvMovieList.setHasFixedSize(true)
         }
     }
-
     private fun getMovieData(callback: (List<Movie>) -> Unit) {
         val apiService = ApiService.getInstance().create(ApiInterface::class.java)
         apiService.getMovieList().enqueue(object : Callback<MovieResponse> {
@@ -62,7 +61,6 @@ class MovieListFragment : Fragment(), OnClickHandler {
                     Log.e(TAG, "Error: movieResponse is null")
                 }
             }
-
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
 
             }
