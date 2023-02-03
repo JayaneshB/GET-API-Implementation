@@ -23,7 +23,6 @@ import retrofit2.Response
 
 private const val TAG = "Fragment"
 
-
 class MovieListFragment : Fragment(), OnClickHandler {
 
     private lateinit var binding: FragmentMovieListBinding
@@ -40,9 +39,6 @@ class MovieListFragment : Fragment(), OnClickHandler {
 
         screenView()
 
-        binding.btnRetry.setOnClickListener {
-            screenView()
-        }
         binding.swipeRefresh.setOnRefreshListener {
             screenView()
             binding.swipeRefresh.isRefreshing=false
@@ -87,6 +83,7 @@ class MovieListFragment : Fragment(), OnClickHandler {
 
         with(binding) {
             if (networkAvailable()) {
+                progressBar.visibility = View.VISIBLE
                 internetState.visibility = View.VISIBLE
                 noInternetLayout.visibility = View.GONE
                 getMovieData { movies: List<Movie> ->
@@ -95,7 +92,9 @@ class MovieListFragment : Fragment(), OnClickHandler {
                     } else {
                         Log.e(TAG, "Error: movieResponse is null")
                     }
+                    progressBar.visibility = View.GONE
                 }
+
             } else {
                 noInternetLayout.visibility = View.VISIBLE
                 internetState.visibility = View.GONE

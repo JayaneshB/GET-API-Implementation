@@ -13,117 +13,77 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/internet_state"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <androidx.core.widget.NestedScrollView
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/internet_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/movieCatalog"
+                    style="@style/HeaderView_tv"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/movie_catalog"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/popularMovies"
+                    style="@style/HeaderView_tv"
+                    android:text="@string/popular_movies_title"
+                    android:textSize="18sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_movieList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="16dp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/noInternet_Layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fillViewport="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_noInternet"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="130dp"
+                    android:layout_marginTop="120dp"
+                    android:src="@drawable/ic_nointernet" />
 
-                    <TextView
-                        android:id="@+id/movieCatalog"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/movie_catalog"
-                        android:textColor="@color/white"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/oops"
+                    style="@style/noInternetState_tv"
+                    android:layout_below="@id/img_noInternet"
+                    android:text="@string/connectionLost"
+                    android:textColor="@color/orangish_yellow" />
 
-                    <TextView
-                        android:id="@+id/popularMovies"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/popular_movies_title"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/message_desc"
+                    style="@style/noInternetState_tv"
+                    android:layout_below="@+id/oops"
+                    android:text="@string/network_connection"
+                    android:textColor="@color/white" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_movieList"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="16dp" />
-
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/noInternet_Layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_noInternet"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="130dp"
-                android:layout_marginTop="150dp"
-                android:src="@drawable/ic_nointernet" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/oops"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/img_noInternet"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="15dp"
-                android:text="@string/oopss"
-                android:textColor="#FF0000"
-                android:textSize="32sp"
-                android:textStyle="bold" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/message_noNetwork"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/oops"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="5dp"
-                android:text="@string/no_internet_access"
-                android:textColor="@color/white"
-                android:textSize="28sp" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/message_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/message_noNetwork"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:text="@string/network_connection"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_retry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/message_desc"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/ic_btn_background"
-                android:text="@string/retry" />
+            </RelativeLayout>
 
         </RelativeLayout>
 

@@ -11,7 +11,7 @@
     <string name="movie_name">Movie Name</string>
     <string name="release_date">Release Date</string>
     <string name="retry">Retry</string>
-    <string name="network_connection">Please check the network connection</string>
+    <string name="network_connection">Try again : Network error :(</string>
     <string name="no_internet_access">No Internet Access :(</string>
-    <string name="oopss">OOPSS!!</string>
+    <string name="connectionLost">Connection Lost !!</string>
 </resources>
