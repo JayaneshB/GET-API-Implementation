@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.animation.AnimationUtils
+import com.bumptech.glide.Glide
 import com.project.moviebuff_demo.databinding.ActivitySplashScreenBinding
 
 class SplashScreen : AppCompatActivity() {
@@ -20,10 +21,13 @@ class SplashScreen : AppCompatActivity() {
 
         binding.splashTv.startAnimation(animation)
 
+
+        Glide.with(this@SplashScreen).load(R.drawable.ic_launcher).into(binding.gifImg)
+
         Handler().postDelayed( {
             startActivity(
                 Intent(this@SplashScreen,MainActivity::class.java))
             finish()
-        },2000)
+        },5000)
     }
 }
