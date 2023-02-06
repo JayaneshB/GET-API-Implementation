@@ -26,6 +26,7 @@ private const val TAG = "Fragment"
 class MovieListFragment : Fragment(), OnClickHandler {
 
     private lateinit var binding: FragmentMovieListBinding
+    private var movieList: List<Movie>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,18 +38,38 @@ class MovieListFragment : Fragment(), OnClickHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        screenView()
+        /**
+         * Used SavedInstance to store and restore the data
+         */
+
+        if (savedInstanceState != null) {
+            movieList = savedInstanceState.getParcelableArrayList("MOVIE_LIST")
+            if (movieList != null) {
+                binding.rvMovieList.adapter = MovieAdapter(movieList!!, this@MovieListFragment)
+            }
+        } else {
+            screenView()
+        }
+
+        /**
+         *  Used SwipeToRefresh to refresh the screen based on the network state
+         */
 
         binding.swipeRefresh.setOnRefreshListener {
             screenView()
-            binding.swipeRefresh.isRefreshing=false
+            binding.swipeRefresh.isRefreshing = false
         }
+
+        /**
+         *  Used LinearLayoutManager to view the list
+         */
 
         binding.apply {
             this.rvMovieList.layoutManager = LinearLayoutManager(context)
             this.rvMovieList.setHasFixedSize(true)
         }
     }
+
     private fun getMovieData(callback: (List<Movie>) -> Unit) {
         val apiService = ApiService.getInstance().create(ApiInterface::class.java)
         apiService.getMovieList().enqueue(object : Callback<MovieResponse> {
@@ -61,6 +82,7 @@ class MovieListFragment : Fragment(), OnClickHandler {
                     Log.e(TAG, "Error: movieResponse is null")
                 }
             }
+
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
 
             }
@@ -70,6 +92,7 @@ class MovieListFragment : Fragment(), OnClickHandler {
     override fun onClick(pos: Movie) {
 
     }
+
     private fun networkAvailable(): Boolean {
 
         val check = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -77,6 +100,10 @@ class MovieListFragment : Fragment(), OnClickHandler {
         return (networkCheck != null && networkCheck.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))
 
     }
+
+    /**
+     *  Function for defining which layout should be visible
+     */
     private fun screenView() {
 
         with(binding) {

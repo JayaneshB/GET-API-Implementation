@@ -18,10 +18,6 @@ class MainActivity : AppCompatActivity() {
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        layout()
-//
-//        binding.btnRetry.setOnClickListener {
-//            layout()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.main, MovieListFragment(), "movie_list_fragment")
@@ -29,32 +25,4 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-//    private fun networkAvaiable():Boolean {
-//
-//        val check = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-//        val networkCheck = check.getNetworkCapabilities(check.activeNetwork)
-//
-//        return (networkCheck!=null && networkCheck.hasCapability(NET_CAPABILITY_INTERNET))
-//
-//    }
-
-//    private fun layout() {
-//
-//        if(networkAvaiable()) {
-//
-//            supportFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.main, MovieListFragment(), "movie_list_fragment")
-//                .commit()
-//
-//            binding.noInternetLayout.visibility = View.GONE
-//
-//        }
-//        else {
-//            binding.noInternetLayout.visibility= View.VISIBLE
-//            binding.main.visibility = View.GONE
-//        }
-//
-//    }
 
