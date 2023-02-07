@@ -1,10 +1,14 @@
 package com.project.moviebuff_demo
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.TypedValue
 import android.view.animation.AnimationUtils
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import com.bumptech.glide.Glide
 import com.project.moviebuff_demo.databinding.ActivitySplashScreenBinding
 
