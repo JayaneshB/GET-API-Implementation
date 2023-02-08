@@ -11,31 +11,38 @@ import com.bumptech.glide.Glide
 import com.project.moviebuff_demo.Fragment.MovieFragment
 import com.project.moviebuff_demo.Interface.OnClickHandler
 import com.project.moviebuff_demo.R
+import com.project.moviebuff_demo.databinding.MovieItemBinding
 import com.project.moviebuff_demo.models.Movie
 
 class MovieAdapter(private val movies: List<Movie>, private val clickHandler: OnClickHandler) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-    inner class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+
+    inner class MovieViewHolder(val binding: MovieItemBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
-            view.setOnClickListener(this)
+            binding.root.setOnClickListener(this)
         }
 
         private val imageURL = "https://image.tmdb.org/t/p/w500/"
 
         fun bindMovie(movie: Movie) {
 
-            val title: TextView = itemView.findViewById(R.id.movie_title)
-            val date: TextView = itemView.findViewById(R.id.movie_releaseDate)
-            val poster: ImageView = itemView.findViewById(R.id.movie_Poster)
+//            val title: TextView = itemView.findViewById(R.id.movie_title)
+//            val date: TextView = itemView.findViewById(R.id.movie_releaseDate)
+//            val poster: ImageView = itemView.findViewById(R.id.movie_Poster)
+//
+//            title.text = movie.original_title
+//            date.text = movie.release_date
 
-            title.text = movie.original_title
-            date.text = movie.release_date
+            binding.movieTitle.text = movie.original_title
+            binding.movieReleaseDate.text = movie.release_date
+
 
             /**
              * Glide is used for loading the images from the API to the view
              */
-            Glide.with(itemView).load(imageURL + movie.poster_path).into(poster)
+            Glide.with(itemView).load(imageURL + movie.poster_path).into(binding.moviePoster)
 
         }
 
@@ -46,11 +53,20 @@ class MovieAdapter(private val movies: List<Movie>, private val clickHandler: On
 
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        return MovieViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
+//        return MovieViewHolder(
+//            LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
+//        )
+        val binding = MovieItemBinding.inflate(
+            LayoutInflater.from(
+                parent.context
+            ), parent, false
         )
+        return MovieViewHolder(binding)
+
     }
+
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = movies[position]
         holder.bindMovie(movie)
@@ -73,4 +89,6 @@ class MovieAdapter(private val movies: List<Movie>, private val clickHandler: On
     override fun getItemCount(): Int {
         return movies.size
     }
+
 }
+
