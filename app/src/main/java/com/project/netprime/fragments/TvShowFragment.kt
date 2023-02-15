@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.netprime.adapter.TvShowAdapter
 import com.project.netprime.databinding.FragmentTvShowBinding
@@ -17,11 +19,13 @@ import com.project.netprime.services.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TvShowFragment : Fragment(),OnClickTvShowHandler {
 
     private lateinit var binding : FragmentTvShowBinding
-
+    private var tvShowList:List<TvShow> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +49,18 @@ class TvShowFragment : Fragment(),OnClickTvShowHandler {
             binding.rvTvShowList.adapter = TvShowAdapter(tvShows,this)
 
         }
+
+        binding.searchViewBox.setOnQueryTextListener(object:SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                filterSearch(newText)
+                return true
+            }
+
+        })
     }
 
     private fun getTvShowData(callBack: (List<TvShow>) -> Unit) {
@@ -54,7 +70,8 @@ class TvShowFragment : Fragment(),OnClickTvShowHandler {
         apiService.getTvList(apiKey).enqueue(object : Callback<TvShowResponse> {
             override fun onResponse(call: Call<TvShowResponse>, response: Response<TvShowResponse>) {
                 if(response.body()!=null) {
-                    return callBack(response.body()!!.tvShow)
+                    tvShowList=response.body()!!.tvShow
+                    return callBack(tvShowList)
                 }
                 else {
                     Log.e("Msg","Error: Tv Show Response is null")
@@ -72,5 +89,24 @@ class TvShowFragment : Fragment(),OnClickTvShowHandler {
 
     }
 
+    private fun filterSearch(query:String) {
 
+        if(query!=null) {
+            val filterList = ArrayList<TvShow>()
+            for(i in tvShowList) {
+                if(i.tvshow_name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
+                    filterList.add(i)
+                }
+            }
+            if(filterList.isEmpty()) {
+                Toast.makeText(requireContext(),"No Results Found",Toast.LENGTH_SHORT).show()
+            }
+            else {
+                binding.rvTvShowList.adapter=TvShowAdapter(filterList,this)
+            }
+        }
+        else {
+            binding.rvTvShowList.adapter = TvShowAdapter(tvShowList,this)
+        }
+    }
 }

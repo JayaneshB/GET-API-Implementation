@@ -9,11 +9,10 @@ import com.bumptech.glide.Glide
 import com.project.netprime.R
 import com.project.netprime.databinding.MovieItemBinding
 import com.project.netprime.fragments.MovieDetailFragment
-import com.project.netprime.fragments.MovieFragment
 import com.project.netprime.models.Movie
 import com.project.netprime.onClickInterface.OnClickMovieHandler
 
-class MovieAdapter(private val movies: List<Movie>,private val onClick : OnClickMovieHandler) :
+class MovieAdapter(private var movies: List<Movie>,private val onClick : OnClickMovieHandler) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(val binding: MovieItemBinding):RecyclerView.ViewHolder(binding.root),
@@ -29,6 +28,11 @@ class MovieAdapter(private val movies: List<Movie>,private val onClick : OnClick
             binding.movieTitle.text = movie.original_title
             binding.movieReleaseDate.text = movie.release_date
             Glide.with(itemView).load(imageURL + movie.poster_path).into(binding.moviePoster)
+        }
+
+        fun searchFilteredResult(result:List<Movie>) {
+            movies=result
+            notifyDataSetChanged()
         }
 
         override fun onClick(v: View?) {
@@ -57,7 +61,9 @@ class MovieAdapter(private val movies: List<Movie>,private val onClick : OnClick
             )
             val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
             fragmentTransaction.add(R.id.main, fragment).addToBackStack(null).commit()
+
         }
+
     }
 
 

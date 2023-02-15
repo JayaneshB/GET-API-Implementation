@@ -12,7 +12,7 @@ import com.project.netprime.fragments.TvshowDetailFragment
 import com.project.netprime.models.TvShow
 import com.project.netprime.onClickInterface.OnClickTvShowHandler
 
-class TvShowAdapter(private val tvShow:List<TvShow>,private val onClick : OnClickTvShowHandler) :
+class TvShowAdapter(private var tvShow:List<TvShow>,private val onClick : OnClickTvShowHandler) :
 RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>(){
     inner class TvShowViewHolder(val binding: MovieItemBinding):RecyclerView.ViewHolder(binding.root),
         View.OnClickListener {
@@ -23,6 +23,11 @@ RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>(){
             binding.movieTitle.text = tvShow.tvshow_name
             binding.movieReleaseDate.text = tvShow.tvShow_releaseDate
             Glide.with(itemView).load(imageURL + tvShow.tvShow_poster_path).into(binding.moviePoster)
+        }
+
+        fun searchFilteredResult(result:List<TvShow>){
+            tvShow=result
+            notifyDataSetChanged()
         }
 
         override fun onClick(v: View?) {
