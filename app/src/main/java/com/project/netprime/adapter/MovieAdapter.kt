@@ -56,7 +56,7 @@ class MovieAdapter(private val movies: List<Movie>,private val onClick : OnClick
                 movie.movie_overview, movie.original_title, movie.poster_path
             )
             val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.movieFragment, fragment).addToBackStack(null).commit()
+            fragmentTransaction.add(R.id.main, fragment).addToBackStack(null).commit()
         }
     }
 
