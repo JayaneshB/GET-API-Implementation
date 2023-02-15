@@ -27,25 +27,14 @@ class MovieAdapter(private val movies: List<Movie>, private val clickHandler: On
         private val imageURL = "https://image.tmdb.org/t/p/w500/"
 
         fun bindMovie(movie: Movie) {
-
-//            val title: TextView = itemView.findViewById(R.id.movie_title)
-//            val date: TextView = itemView.findViewById(R.id.movie_releaseDate)
-//            val poster: ImageView = itemView.findViewById(R.id.movie_Poster)
-//
-//            title.text = movie.original_title
-//            date.text = movie.release_date
-
             binding.movieTitle.text = movie.original_title
             binding.movieReleaseDate.text = movie.release_date
-
-
             /**
              * Glide is used for loading the images from the API to the view
              */
             Glide.with(itemView).load(imageURL + movie.poster_path).into(binding.moviePoster)
 
         }
-
         override fun onClick(v: View?) {
 
             val pos = movies[bindingAdapterPosition]
@@ -83,6 +72,7 @@ class MovieAdapter(private val movies: List<Movie>, private val clickHandler: On
             )
             val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.main, fragment).addToBackStack(null).commit()
+
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.project.moviebuff_demo.R
@@ -78,6 +79,8 @@ class MovieFragment : Fragment() {
             Handler().postDelayed({ parentFragmentManager.popBackStack() }, 3000)
 
         }
+
+//        findNavController().navigate(R.id.action_movieFragment_to_movieListFragment)
 
         return binding.root
     }

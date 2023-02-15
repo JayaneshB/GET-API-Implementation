@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.moviebuff_demo.Interface.OnClickHandler
+import com.project.moviebuff_demo.R
 import com.project.moviebuff_demo.adapter.MovieAdapter
 import com.project.moviebuff_demo.databinding.FragmentMovieListBinding
 import com.project.moviebuff_demo.models.Movie
@@ -68,6 +70,8 @@ class MovieListFragment : Fragment(), OnClickHandler {
             this.rvMovieList.layoutManager = LinearLayoutManager(context)
             this.rvMovieList.setHasFixedSize(true)
         }
+
+//        findNavController().navigate(R.id.action_movieListFragment_to_movieFragment)
     }
 
     private fun getMovieData(callback: (List<Movie>) -> Unit) {
