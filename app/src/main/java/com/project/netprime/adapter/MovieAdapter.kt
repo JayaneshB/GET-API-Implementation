@@ -1,15 +1,27 @@
 package com.project.netprime.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.project.netprime.R
 import com.project.netprime.databinding.MovieItemBinding
+import com.project.netprime.fragments.MovieDetailFragment
+import com.project.netprime.fragments.MovieFragment
 import com.project.netprime.models.Movie
+import com.project.netprime.onClickInterface.OnClickMovieHandler
 
-class MovieAdapter(private val movies: List<Movie>) :
+class MovieAdapter(private val movies: List<Movie>,private val onClick : OnClickMovieHandler) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-    class MovieViewHolder(val binding: MovieItemBinding):RecyclerView.ViewHolder(binding.root) {
+
+    inner class MovieViewHolder(val binding: MovieItemBinding):RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener {
+
+        init {
+            binding.root.setOnClickListener(this)
+        }
 
         private val imageURL = "https://image.tmdb.org/t/p/w500/"
 
@@ -17,6 +29,11 @@ class MovieAdapter(private val movies: List<Movie>) :
             binding.movieTitle.text = movie.original_title
             binding.movieReleaseDate.text = movie.release_date
             Glide.with(itemView).load(imageURL + movie.poster_path).into(binding.moviePoster)
+        }
+
+        override fun onClick(v: View?) {
+            val pos = movies[bindingAdapterPosition]
+            onClick.onClickMovie(pos)
         }
     }
 
@@ -30,7 +47,17 @@ class MovieAdapter(private val movies: List<Movie>) :
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bindMovie(movies.get(position))
+        val movie = movies[position]
+        holder.bindMovie(movie)
+
+        holder.itemView.setOnClickListener{
+            val activity = holder.itemView.context as AppCompatActivity
+            val fragment = MovieDetailFragment.newInstance(
+                movie.movie_overview, movie.original_title, movie.poster_path
+            )
+            val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.movieFragment, fragment).addToBackStack(null).commit()
+        }
     }
 
 

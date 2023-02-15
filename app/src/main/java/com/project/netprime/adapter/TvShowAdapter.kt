@@ -1,15 +1,21 @@
 package com.project.netprime.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.project.netprime.R
 import com.project.netprime.databinding.MovieItemBinding
+import com.project.netprime.fragments.TvshowDetailFragment
 import com.project.netprime.models.TvShow
+import com.project.netprime.onClickInterface.OnClickTvShowHandler
 
-class TvShowAdapter(private val tvShow:List<TvShow>) :
+class TvShowAdapter(private val tvShow:List<TvShow>,private val onClick : OnClickTvShowHandler) :
 RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>(){
-    class TvShowViewHolder(val binding: MovieItemBinding):RecyclerView.ViewHolder(binding.root) {
+    inner class TvShowViewHolder(val binding: MovieItemBinding):RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener {
 
         private val imageURL = "https://image.tmdb.org/t/p/w500/"
 
@@ -17,6 +23,13 @@ RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>(){
             binding.movieTitle.text = tvShow.tvshow_name
             binding.movieReleaseDate.text = tvShow.tvShow_releaseDate
             Glide.with(itemView).load(imageURL + tvShow.tvShow_poster_path).into(binding.moviePoster)
+        }
+
+        override fun onClick(v: View?) {
+
+            val position = tvShow[bindingAdapterPosition]
+            onClick.onClickTvShow(position)
+
         }
     }
 
@@ -30,6 +43,17 @@ RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: TvShowViewHolder, position: Int) {
-        holder.bindTvShow(tvShow.get(position))
+        val tvShow = tvShow[position]
+        holder.bindTvShow(tvShow)
+
+        holder.itemView.setOnClickListener {
+            val activity = holder.itemView.context as AppCompatActivity
+            val fragment = TvshowDetailFragment.newInstance(
+                tvShow.tvShow_overview,tvShow.tvshow_name,tvShow.tvShow_poster_path
+            )
+            val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.fragment_tvShow,fragment).addToBackStack(null).commit()
+
+        }
     }
 }

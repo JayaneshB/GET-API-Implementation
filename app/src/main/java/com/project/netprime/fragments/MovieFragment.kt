@@ -12,24 +12,25 @@ import com.project.netprime.adapter.MovieAdapter
 import com.project.netprime.databinding.FragmentMovieBinding
 import com.project.netprime.models.Movie
 import com.project.netprime.models.MovieResponse
+import com.project.netprime.onClickInterface.OnClickMovieHandler
 import com.project.netprime.services.ApiInterface
 import com.project.netprime.services.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieFragment : Fragment() {
+class MovieFragment : Fragment(), OnClickMovieHandler {
 
     private lateinit var binding: FragmentMovieBinding
     private var TAG = MainActivity::class.simpleName
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentMovieBinding.inflate(inflater, container, false)
+        binding= FragmentMovieBinding.inflate(inflater,container,false)
+
         return (binding.root)
     }
 
@@ -43,7 +44,7 @@ class MovieFragment : Fragment() {
 
       getMovieData { movies : List<Movie> ->
 
-          binding.rvMovieList.adapter = MovieAdapter(movies)
+          binding.rvMovieList.adapter = MovieAdapter(movies,this@MovieFragment)
 
       }
     }
@@ -64,8 +65,10 @@ class MovieFragment : Fragment() {
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
 
             }
-
         })
+    }
+
+    override fun onClickMovie(pos: Movie) {
 
     }
 }

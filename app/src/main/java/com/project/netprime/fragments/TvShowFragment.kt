@@ -11,13 +11,14 @@ import com.project.netprime.adapter.TvShowAdapter
 import com.project.netprime.databinding.FragmentTvShowBinding
 import com.project.netprime.models.TvShowResponse
 import com.project.netprime.models.TvShow
+import com.project.netprime.onClickInterface.OnClickTvShowHandler
 import com.project.netprime.services.ApiInterface
 import com.project.netprime.services.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TvShowFragment : Fragment() {
+class TvShowFragment : Fragment(),OnClickTvShowHandler {
 
     private lateinit var binding : FragmentTvShowBinding
 
@@ -41,7 +42,7 @@ class TvShowFragment : Fragment() {
 
         getTvShowData { tvShows : List<TvShow> ->
 
-            binding.rvTvShowList.adapter = TvShowAdapter(tvShows)
+            binding.rvTvShowList.adapter = TvShowAdapter(tvShows,this)
 
         }
     }
@@ -64,6 +65,10 @@ class TvShowFragment : Fragment() {
             }
 
         })
+
+    }
+
+    override fun onClickTvShow(pos: TvShow) {
 
     }
 
