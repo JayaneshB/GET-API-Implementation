@@ -56,7 +56,7 @@ RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>(){
             val fragment = TvshowDetailFragment.newInstance(
                 tvShow.tvShow_overview,tvShow.tvshow_name,tvShow.tvShow_poster_path,tvShow.tvShow_releaseDate)
             val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
-            fragmentTransaction.add(R.id.main,fragment).addToBackStack(null).commit()
+            fragmentTransaction.replace(R.id.main,fragment).addToBackStack(null).commit()
 
         }
     }
