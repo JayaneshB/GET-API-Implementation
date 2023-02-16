@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     Log.d(TAG, "onTabSelected: ")
+                    viewPager2.setCurrentItem(tab!!.position)
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
