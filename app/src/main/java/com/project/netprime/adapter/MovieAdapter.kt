@@ -57,7 +57,7 @@ class MovieAdapter(private var movies: List<Movie>,private val onClick : OnClick
         holder.itemView.setOnClickListener{
             val activity = holder.itemView.context as AppCompatActivity
             val fragment = MovieDetailFragment.newInstance(
-                movie.movie_overview, movie.original_title, movie.poster_path
+                movie.movie_overview, movie.original_title, movie.poster_path,movie.release_date
             )
             val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
             fragmentTransaction.add(R.id.main, fragment).addToBackStack(null).commit()
@@ -65,6 +65,4 @@ class MovieAdapter(private var movies: List<Movie>,private val onClick : OnClick
         }
 
     }
-
-
 }
