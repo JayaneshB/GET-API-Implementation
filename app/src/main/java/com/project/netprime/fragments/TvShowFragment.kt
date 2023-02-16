@@ -22,17 +22,17 @@ import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TvShowFragment : Fragment(),OnClickTvShowHandler {
+class TvShowFragment : Fragment(), OnClickTvShowHandler {
 
-    private lateinit var binding : FragmentTvShowBinding
-    private var tvShowList:List<TvShow> = emptyList()
+    private lateinit var binding: FragmentTvShowBinding
+    private var tvShowList: List<TvShow> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentTvShowBinding.inflate(inflater,container,false)
+        binding = FragmentTvShowBinding.inflate(inflater, container, false)
         return (binding.root)
     }
 
@@ -40,17 +40,17 @@ class TvShowFragment : Fragment(),OnClickTvShowHandler {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            this.rvTvShowList.layoutManager=LinearLayoutManager(context)
+            this.rvTvShowList.layoutManager = LinearLayoutManager(context)
             this.rvTvShowList.setHasFixedSize(true)
         }
 
-        getTvShowData { tvShows : List<TvShow> ->
+        getTvShowData { tvShows: List<TvShow> ->
 
-            binding.rvTvShowList.adapter = TvShowAdapter(tvShows,this)
+            binding.rvTvShowList.adapter = TvShowAdapter(tvShows, this)
 
         }
 
-        binding.searchViewBox.setOnQueryTextListener(object:SearchView.OnQueryTextListener {
+        binding.searchViewBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -68,13 +68,15 @@ class TvShowFragment : Fragment(),OnClickTvShowHandler {
         val apiService = ApiService.getInstance().create(ApiInterface::class.java)
         val apiKey = "72feba6dc1a2eda1297a8f778e2eb1d1"
         apiService.getTvList(apiKey).enqueue(object : Callback<TvShowResponse> {
-            override fun onResponse(call: Call<TvShowResponse>, response: Response<TvShowResponse>) {
-                if(response.body()!=null) {
-                    tvShowList=response.body()!!.tvShow
+            override fun onResponse(
+                call: Call<TvShowResponse>,
+                response: Response<TvShowResponse>
+            ) {
+                if (response.body() != null) {
+                    tvShowList = response.body()!!.tvShow
                     return callBack(tvShowList)
-                }
-                else {
-                    Log.e("Msg","Error: Tv Show Response is null")
+                } else {
+                    Log.e("Msg", "Error: Tv Show Response is null")
                 }
             }
 
@@ -89,24 +91,22 @@ class TvShowFragment : Fragment(),OnClickTvShowHandler {
 
     }
 
-    private fun filterSearch(query:String) {
+    private fun filterSearch(query: String) {
 
-        if(query!=null) {
+        if (query != null) {
             val filterList = ArrayList<TvShow>()
-            for(i in tvShowList) {
-                if(i.tvshow_name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
+            for (i in tvShowList) {
+                if (i.tvshow_name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
                     filterList.add(i)
                 }
             }
-            if(filterList.isEmpty()) {
-                Toast.makeText(requireContext(),"No Results Found",Toast.LENGTH_SHORT).show()
+            if (filterList.isEmpty()) {
+                Toast.makeText(requireContext(), "No Results Found", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.rvTvShowList.adapter = TvShowAdapter(filterList, this)
             }
-            else {
-                binding.rvTvShowList.adapter=TvShowAdapter(filterList,this)
-            }
-        }
-        else {
-            binding.rvTvShowList.adapter = TvShowAdapter(tvShowList,this)
+        } else {
+            binding.rvTvShowList.adapter = TvShowAdapter(tvShowList, this)
         }
     }
 }
