@@ -1,9 +1,11 @@
 package com.project.netprime.services
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 
 
 class ApiService {
@@ -14,8 +16,9 @@ class ApiService {
         fun getInstance() : Retrofit{
             if(retrofit==null) {
                 retrofit=Retrofit.Builder()
-                    .baseUrl(BASE_URL).client(getHttpClient())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(BASE_URL)
+                    .client(getHttpClient())
+                    .addConverterFactory(JsonConverter.json.asConverterFactory("application/json".toMediaType()))
                     .build()
             }
             return retrofit!!
@@ -23,8 +26,12 @@ class ApiService {
 
         private fun getHttpClient(): OkHttpClient {
             val interceptor = HttpLoggingInterceptor()
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+            interceptor.level=(HttpLoggingInterceptor.Level.BODY)
             return OkHttpClient.Builder().addInterceptor(interceptor).build()
         }
     }
+}
+
+object JsonConverter {
+    val json: Json = Json { ignoreUnknownKeys = true }
 }

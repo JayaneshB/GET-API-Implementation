@@ -1,12 +1,11 @@
 package com.project.netprime.models
 
-import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class MovieResponse(
-    @SerializedName("results")
+    @SerialName("results")
     val movie: List<Movie>,
-) : Parcelable
+)
 

@@ -1,6 +1,7 @@
 package com.project.netprime.fragments
 
 import android.content.Context
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.project.netprime.adapter.TvShowAdapter
 import com.project.netprime.databinding.FragmentTvShowBinding
 import com.project.netprime.models.TvShowResponse
 import com.project.netprime.models.TvShow
+import com.project.netprime.network.NetworkChangeReceiver
 import com.project.netprime.onClickInterface.OnClickTvShowHandler
 import com.project.netprime.services.ApiInterface
 import com.project.netprime.services.ApiService
@@ -44,13 +46,36 @@ class TvShowFragment : Fragment(), OnClickTvShowHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Register network state change receiver
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        requireActivity().registerReceiver(NetworkChangeReceiver(view), intentFilter)
+
         binding.apply {
             this.rvTvShowList.layoutManager = LinearLayoutManager(context)
             this.rvTvShowList.setHasFixedSize(true)
         }
 
+        /**
+         * Used SavedInstance to store and restore the data
+         */
+
+        if(savedInstanceState!=null) {
+            tvShowList = savedInstanceState.getParcelableArrayList("TVSHOW_LIST")!!
+            binding.rvTvShowList.adapter=TvShowAdapter(tvShowList,this@TvShowFragment)
+        }
+
         getTvShowData { tvShows: List<TvShow> ->
-            binding.rvTvShowList.adapter = TvShowAdapter(tvShows, this)
+            if (tvShows.isNotEmpty()) {
+                binding.rvTvShowList.adapter = TvShowAdapter(tvShows, this)
+            } else {
+                Toast.makeText(requireContext(), "Failed to get Tv Show Data", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        binding.swipeRefresh.setOnRefreshListener {
+            screenView()
+            binding.swipeRefresh.isRefreshing=false
         }
 
         binding.searchViewBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -65,7 +90,7 @@ class TvShowFragment : Fragment(), OnClickTvShowHandler {
         })
     }
 
-    private fun getTvShowData(callBack: (List<TvShow>,) -> Unit) {
+    private fun getTvShowData(callBack: (List<TvShow>) -> Unit) {
 
         val apiService = ApiService.getInstance().create(ApiInterface::class.java)
         val apiKey = "72feba6dc1a2eda1297a8f778e2eb1d1"
@@ -74,20 +99,24 @@ class TvShowFragment : Fragment(), OnClickTvShowHandler {
                 call: Call<TvShowResponse>,
                 response: Response<TvShowResponse>
             ) {
-                if (response.body() != null) {
-                    tvShowList = response.body()!!.tvShow
-                    return callBack(tvShowList)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        tvShowList = it.tvShow
+                        callBack(tvShowList)
+                    }
                 } else {
-                    Log.e("Msg", "Error: Tv Show Response is null")
+                    Log.e(TAG, "Error: Tv Show Response is null")
+                    callBack(emptyList())
                 }
             }
 
             override fun onFailure(call: Call<TvShowResponse>, t: Throwable) {
+                Log.e(TAG, "Failed to get Tv Show Data", t)
+                callBack(emptyList())
             }
-
         })
-
     }
+
 
     override fun onClickTvShow(pos: TvShow) {
 
@@ -95,20 +124,16 @@ class TvShowFragment : Fragment(), OnClickTvShowHandler {
 
     private fun filterSearch(query: String) {
 
-        if (query != null) {
-            val filterList = ArrayList<TvShow>()
-            for (i in tvShowList) {
-                if (i.tvshow_name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
-                    filterList.add(i)
-                }
+        val filterList = ArrayList<TvShow>()
+        for (i in tvShowList) {
+            if (i.tvshow_name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
+                filterList.add(i)
             }
-            if (filterList.isEmpty()) {
-                Toast.makeText(requireContext(), "No Results Found", Toast.LENGTH_SHORT).show()
-            } else {
-                binding.rvTvShowList.adapter = TvShowAdapter(filterList, this)
-            }
+        }
+        if (filterList.isEmpty()) {
+            Toast.makeText(requireContext(), "No Results Found", Toast.LENGTH_SHORT).show()
         } else {
-            binding.rvTvShowList.adapter = TvShowAdapter(tvShowList, this)
+            binding.rvTvShowList.adapter = TvShowAdapter(filterList, this)
         }
     }
 
@@ -123,20 +148,19 @@ class TvShowFragment : Fragment(), OnClickTvShowHandler {
     private fun screenView() {
 
         with(binding) {
-            if(networkAvailable()) {
-                progressBar.visibility=View.VISIBLE
-                activeState.visibility=View.VISIBLE
-                inactiveState.visibility=View.GONE
+            if (networkAvailable()) {
+                progressBar.visibility = View.VISIBLE
+                activeState.visibility = View.VISIBLE
+                inactiveState.visibility = View.GONE
 
-                getTvShowData {tvShows: List<TvShow> ->
-                    if(tvShows.isNotEmpty()) {
-                        rvTvShowList.adapter=TvShowAdapter(tvShows,this@TvShowFragment)
-                    }
-                    else{
-                        Log.e(TAG,"Error : TvShow Response is null")
+                getTvShowData { tvShows: List<TvShow> ->
+                    if (tvShows.isNotEmpty()) {
+                        rvTvShowList.adapter = TvShowAdapter(tvShows, this@TvShowFragment)
+                    } else {
+                        Log.e(TAG, "Error : TvShow Response is null")
                     }
                 }
-                progressBar.visibility=View.GONE
+                progressBar.visibility = View.GONE
             }
             else {
                 inactiveState.visibility=View.VISIBLE

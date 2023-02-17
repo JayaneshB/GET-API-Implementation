@@ -1,6 +1,7 @@
 package com.project.netprime.fragments
 
 import android.content.Context
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.project.netprime.adapter.MovieAdapter
 import com.project.netprime.databinding.FragmentMovieBinding
 import com.project.netprime.models.Movie
 import com.project.netprime.models.MovieResponse
+import com.project.netprime.network.NetworkChangeReceiver
 import com.project.netprime.onClickInterface.OnClickMovieHandler
 import com.project.netprime.services.ApiInterface
 import com.project.netprime.services.ApiService
@@ -24,6 +26,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 import kotlin.collections.ArrayList
 
 class MovieFragment : Fragment(), OnClickMovieHandler {
@@ -31,7 +35,6 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
     private lateinit var binding: FragmentMovieBinding
     private var movieList: List<Movie> = emptyList()
     private var TAG = MainActivity::class.simpleName
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +48,10 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Register network state change receiver
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        requireActivity().registerReceiver(NetworkChangeReceiver(view), intentFilter)
+
         binding.apply {
             this.rvMovieList.layoutManager = LinearLayoutManager(context)
             this.rvMovieList.setHasFixedSize(true)
@@ -56,20 +63,21 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
 
         if (savedInstanceState != null) {
             movieList = savedInstanceState.getParcelableArrayList("MOVIE_LIST")!!
-            if (movieList != null) {
-                binding.rvMovieList.adapter = MovieAdapter(movieList, this@MovieFragment)
-            }
-        } else {
-            screenView()
+            binding.rvMovieList.adapter = MovieAdapter(movieList, this@MovieFragment)
         }
+
+        getMovieData { movies: List<Movie> ->
+            if(movies.isNotEmpty()) {
+                binding.rvMovieList.adapter = MovieAdapter(movies, this@MovieFragment)
+            } else {
+                Toast.makeText(requireContext(),"Failed to get Movie Data",Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
         binding.swipeRefresh.setOnRefreshListener {
             screenView()
             binding.swipeRefresh.isRefreshing=false
-        }
-
-        getMovieData { movies: List<Movie> ->
-            binding.rvMovieList.adapter = MovieAdapter(movies, this@MovieFragment)
         }
 
         binding.searchViewBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -91,16 +99,20 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         val apiKey = "72feba6dc1a2eda1297a8f778e2eb1d1"
         apiService.getMovieList(apiKey).enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                if (response.body() != null) {
-                    movieList =response.body()!!.movie
-                    return callBack(movieList)
+                if (response.isSuccessful) {
+                    response.body()?.let{
+                        movieList=it.movie
+                        callBack(movieList)
+                    }
                 } else {
                     Log.e(TAG, "Error: movieResponse is null")
+                    callBack(emptyList())
                 }
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-
+                Log.e(TAG,"Failed to get Movie Data")
+                callBack(emptyList())
             }
         })
     }
@@ -130,7 +142,6 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         }
     }
 
-
     private fun networkAvailable(): Boolean {
 
         val check = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -147,7 +158,6 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
                 activeState.visibility=View.VISIBLE
                 inactiveState.visibility=View.GONE
                 getMovieData { movies: List<Movie> ->
-
                     if(movies.isNotEmpty()){
                         rvMovieList.adapter=MovieAdapter(movies,this@MovieFragment)
                     }else {
