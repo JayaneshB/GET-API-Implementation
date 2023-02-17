@@ -13,4 +13,7 @@
     <string name="add">Added</string>
     <string name="add_to_wishlist">Add to wishList</string>
     <string name="storyline">StoryLine</string>
+    <string name="network_connection">Try again : Network error :(</string>
+    <string name="no_internet_access">No Internet Access :(</string>
+    <string name="connectionLost">Connection Lost !!</string>
 </resources>

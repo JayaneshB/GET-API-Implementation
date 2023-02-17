@@ -1,5 +1,8 @@
 package com.project.netprime.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -47,10 +50,26 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
             this.rvMovieList.setHasFixedSize(true)
         }
 
+        /**
+         * Used SavedInstance to store and restore the data
+         */
+
+        if (savedInstanceState != null) {
+            movieList = savedInstanceState.getParcelableArrayList("MOVIE_LIST")!!
+            if (movieList != null) {
+                binding.rvMovieList.adapter = MovieAdapter(movieList, this@MovieFragment)
+            }
+        } else {
+            screenView()
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            screenView()
+            binding.swipeRefresh.isRefreshing=false
+        }
+
         getMovieData { movies: List<Movie> ->
-
             binding.rvMovieList.adapter = MovieAdapter(movies, this@MovieFragment)
-
         }
 
         binding.searchViewBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -108,6 +127,39 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         }
         else{
             binding.rvMovieList.adapter = MovieAdapter(movieList,this)
+        }
+    }
+
+
+    private fun networkAvailable(): Boolean {
+
+        val check = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCheck = check.getNetworkCapabilities(check.activeNetwork)
+        return (networkCheck != null && networkCheck.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))
+
+    }
+
+    private fun screenView() {
+
+        with(binding) {
+            if(networkAvailable()) {
+                progressBar.visibility=View.VISIBLE
+                activeState.visibility=View.VISIBLE
+                inactiveState.visibility=View.GONE
+                getMovieData { movies: List<Movie> ->
+
+                    if(movies.isNotEmpty()){
+                        rvMovieList.adapter=MovieAdapter(movies,this@MovieFragment)
+                    }else {
+                        Log.e(TAG,"Error:Movie response is null")
+                    }
+                    progressBar.visibility=View.GONE
+                }
+            }
+            else {
+                inactiveState.visibility=View.VISIBLE
+                activeState.visibility=View.GONE
+            }
         }
     }
 }

@@ -1,13 +1,14 @@
 package com.project.netprime
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.project.netprime.adapter.FragmentPageAdapter
 import com.project.netprime.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,7 +55,6 @@ class MainActivity : AppCompatActivity() {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
             }
         })
-
-
     }
+
 }

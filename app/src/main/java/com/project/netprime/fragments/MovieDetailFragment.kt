@@ -22,6 +22,7 @@ class MovieDetailFragment : Fragment() {
 
     private var imageUrl = "https://image.tmdb.org/t/p/w500/"
 
+
     companion object {
 
         private const val TITLE = "title"
@@ -59,12 +60,14 @@ class MovieDetailFragment : Fragment() {
         val date=arguments?.getString(DATE)
         Glide.with(this).load(imageUrl+arguments?.getString(POSTER)).into(poster)
 
+
         binding.btnMovieFragment.setOnClickListener {
 
             binding.btnMovieFragment.text = (resources.getString(R.string.added))
 //            binding.btnMovieFragment.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_check,0)
             Snackbar.make(requireView(), resources.getString(R.string.add_to_wishlist), Snackbar.LENGTH_SHORT).show()
             wishList(date)
+
         }
 
         return binding.root
