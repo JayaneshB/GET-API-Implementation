@@ -65,17 +65,18 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         }
 
         getMovieData { movies: List<Movie> ->
-            if(movies.isNotEmpty()) {
+            if (movies.isNotEmpty()) {
                 binding.rvMovieList.adapter = MovieAdapter(movies, this@MovieFragment)
             } else {
-                Toast.makeText(requireContext(),"Failed to get Movie Data",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Failed to get Movie Data", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
 
         binding.swipeRefresh.setOnRefreshListener {
             screenView()
-            binding.swipeRefresh.isRefreshing=false
+            binding.swipeRefresh.isRefreshing = false
         }
 
         binding.searchViewBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -91,6 +92,15 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         })
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//
+//        // Register network state change receiver
+//        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+//        requireActivity().registerReceiver(NetworkChangeReceiver(requireView()), intentFilter)
+//
+//    }
+
     private fun getMovieData(callBack: (List<Movie>) -> Unit) {
 
         val apiService = ApiService.getInstance().create(ApiInterface::class.java)
@@ -98,8 +108,8 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         apiService.getMovieList(apiKey).enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 if (response.isSuccessful) {
-                    response.body()?.let{
-                        movieList=it.movie
+                    response.body()?.let {
+                        movieList = it.movie
                         callBack(movieList)
                     }
                 } else {
@@ -109,7 +119,7 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.e(TAG,"Failed to get Movie Data")
+                Log.e(TAG, "Failed to get Movie Data")
                 callBack(emptyList())
             }
         })
@@ -124,19 +134,19 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         if (query != null) {
             val filterList = ArrayList<Movie>()
             for (i in movieList) {
-                if (i.original_title.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
+                if (i.original_title.lowercase(Locale.ROOT)
+                        .contains(query.lowercase(Locale.ROOT))
+                ) {
                     filterList.add(i)
                 }
             }
             if (filterList.isEmpty()) {
-                Toast.makeText(requireContext(),"No Results Found",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "No Results Found", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.rvMovieList.adapter = MovieAdapter(filterList, this)
             }
-            else {
-                binding.rvMovieList.adapter = MovieAdapter(filterList,this)
-            }
-        }
-        else{
-            binding.rvMovieList.adapter = MovieAdapter(movieList,this)
+        } else {
+            binding.rvMovieList.adapter = MovieAdapter(movieList, this)
         }
     }
 
@@ -148,25 +158,24 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
 
     }
 
-    private fun screenView() {
+     fun screenView() {
 
         with(binding) {
-            if(networkAvailable()) {
-                progressBar.visibility=View.VISIBLE
-                activeState.visibility=View.VISIBLE
-                inactiveState.visibility=View.GONE
+            if (networkAvailable()) {
+                progressBar.visibility = View.VISIBLE
+                activeState.visibility = View.VISIBLE
+                inactiveState.visibility = View.GONE
                 getMovieData { movies: List<Movie> ->
-                    if(movies.isNotEmpty()){
-                        rvMovieList.adapter=MovieAdapter(movies,this@MovieFragment)
-                    }else {
-                        Log.e(TAG,"Error:Movie response is null")
+                    if (movies.isNotEmpty()) {
+                        rvMovieList.adapter = MovieAdapter(movies, this@MovieFragment)
+                    } else {
+                        Log.e(TAG, "Error:Movie response is null")
                     }
-                    progressBar.visibility=View.GONE
+                    progressBar.visibility = View.GONE
                 }
-            }
-            else {
-                inactiveState.visibility=View.VISIBLE
-                activeState.visibility=View.GONE
+            } else {
+                inactiveState.visibility = View.VISIBLE
+                activeState.visibility = View.GONE
             }
         }
     }

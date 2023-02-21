@@ -4,10 +4,12 @@ package com.project.netprime
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.project.netprime.adapter.FragmentPageAdapter
 import com.project.netprime.databinding.ActivityMainBinding
+import com.project.netprime.fragments.MovieFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter = FragmentPageAdapter(supportFragmentManager, lifecycle)
 
+
         with(binding) {
            tabLayout.addTab(
                 tabLayout.newTab().setText(resources.getString(R.string.movies))
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
              tabLayout.newTab().setText(resources.getString(R.string.tv_shows))
             )
             binding.viewPager2.adapter = adapter
+//            (binding.viewPager2.get(0) as MovieFragment) .screenView()
+            // todo check viewpager size, do type cast and call refresh function
 
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
