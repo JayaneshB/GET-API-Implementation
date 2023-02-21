@@ -42,9 +42,7 @@ class MovieDetailFragment : Fragment() {
             movieDetailFragment.arguments = bundle
 
             return movieDetailFragment
-
         }
-
     }
 
     override fun onCreateView(

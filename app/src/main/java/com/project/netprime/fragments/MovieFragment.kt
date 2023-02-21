@@ -26,8 +26,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
 import kotlin.collections.ArrayList
 
 class MovieFragment : Fragment(), OnClickMovieHandler {
