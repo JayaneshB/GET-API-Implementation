@@ -12,8 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.netprime.MainActivity
+import com.project.netprime.R
 import com.project.netprime.adapter.MovieAdapter
 import com.project.netprime.databinding.FragmentMovieBinding
 import com.project.netprime.models.Movie
@@ -39,8 +41,8 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentMovieBinding.inflate(inflater, container, false)
-        return (binding.root)
+        binding= FragmentMovieBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,15 +94,6 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
         })
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        // Register network state change receiver
-//        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-//        requireActivity().registerReceiver(NetworkChangeReceiver(requireView()), intentFilter)
-//
-//    }
-
     private fun getMovieData(callBack: (List<Movie>) -> Unit) {
 
         val apiService = ApiService.getInstance().create(ApiInterface::class.java)
@@ -126,6 +119,8 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
     }
 
     override fun onClickMovie(pos: Movie) {
+
+//        Navigation.findNavController(requireView()).navigate(R.id.action_movieFragment3_to_movieDetailFragment3)
 
     }
 
