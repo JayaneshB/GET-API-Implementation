@@ -66,6 +66,8 @@ class MovieDetailFragment : Fragment() {
 //            binding.btnMovieFragment.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_check,0)
             Snackbar.make(requireView(), resources.getString(R.string.add_to_wishlist), Snackbar.LENGTH_SHORT).show()
             wishList(date)
+
+            Navigation.findNavController(requireView()).navigate(R.id.action_movieDetailFragment3_to_movieFragment3)
         }
 
         return binding.root

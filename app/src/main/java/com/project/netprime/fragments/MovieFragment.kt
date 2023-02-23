@@ -120,7 +120,7 @@ class MovieFragment : Fragment(), OnClickMovieHandler {
 
     override fun onClickMovie(pos: Movie) {
 
-//        Navigation.findNavController(requireView()).navigate(R.id.action_movieFragment3_to_movieDetailFragment3)
+        Navigation.findNavController(requireView()).navigate(R.id.action_movieFragment3_to_movieDetailFragment3)
 
     }
 

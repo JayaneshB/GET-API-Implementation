@@ -5,12 +5,25 @@
     android:id="@+id/app_nav"
     app:startDestination="@id/showFragment2">
 
+    <fragment
+        android:id="@+id/showFragment2"
+        android:name="com.project.netprime.fragments.ShowFragment"
+        android:label="fragment_show"
+        tools:layout="@layout/fragment_show">
+
+        <action
+            android:id="@+id/action_movieFragment3_to_movieDetailFragment3"
+            app:destination="@id/movieDetailFragment3" />
+        <action
+            android:id="@+id/action_tvShowFragment2_to_tvshowDetailFragment2"
+            app:destination="@id/tvshowDetailFragment2" />
+    </fragment>
 
     <fragment
         android:id="@+id/movieFragment3"
         android:name="com.project.netprime.fragments.MovieFragment"
         android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie" >
+        tools:layout="@layout/fragment_movie">
         <action
             android:id="@+id/action_movieFragment3_to_movieDetailFragment3"
             app:destination="@id/movieDetailFragment3" />
@@ -19,41 +32,34 @@
         android:id="@+id/movieDetailFragment3"
         android:name="com.project.netprime.fragments.MovieDetailFragment"
         android:label="fragment_movie_detail"
-        tools:layout="@layout/fragment_movie_detail" >
-<!--        <action-->
-<!--            android:id="@+id/action_movieDetailFragment3_to_movieFragment3"-->
-<!--            app:destination="@id/movieFragment3" />-->
+        tools:layout="@layout/fragment_movie_detail">
+        <!--        <action-->
+        <!--            android:id="@+id/action_movieDetailFragment3_to_movieFragment3"-->
+        <!--            app:destination="@id/movieFragment3" />-->
+        <action
+            android:id="@+id/action_movieDetailFragment3_to_movieFragment3"
+            app:destination="@id/movieFragment3" />
     </fragment>
     <fragment
         android:id="@+id/tvShowFragment2"
         android:name="com.project.netprime.fragments.TvShowFragment"
         android:label="fragment_tv_show"
-        tools:layout="@layout/fragment_tv_show" >
-<!--        <action-->
-<!--            android:id="@+id/action_tvShowFragment2_to_tvshowDetailFragment2"-->
-<!--            app:destination="@id/tvshowDetailFragment2" />-->
+        tools:layout="@layout/fragment_tv_show">
+        <!--        <action-->
+        <!--            android:id="@+id/action_tvShowFragment2_to_tvshowDetailFragment2"-->
+        <!--            app:destination="@id/tvshowDetailFragment2" />-->
+        <action
+            android:id="@+id/action_tvshowDetailFragment2_to_tvShowFragment2"
+            app:destination="@+id/tvShowFragment2"/>
     </fragment>
     <fragment
         android:id="@+id/tvshowDetailFragment2"
         android:name="com.project.netprime.fragments.TvshowDetailFragment"
         android:label="fragment_tvshow_detail"
-        tools:layout="@layout/fragment_tvshow_detail" >
+        tools:layout="@layout/fragment_tvshow_detail">
         <action
             android:id="@+id/action_tvshowDetailFragment2_to_tvShowFragment2"
             app:destination="@id/tvShowFragment2" />
     </fragment>
-    <fragment
-        android:id="@+id/showFragment2"
-        android:name="com.project.netprime.fragments.ShowFragment"
-        android:label="fragment_show"
-        tools:layout="@layout/fragment_show">
 
-
-    <action
-        android:id="@+id/action_movieFragment3_to_movieDetailFragment3"
-        app:destination="@id/movieDetailFragment3" />
-        <action
-            android:id="@+id/action_tvShowFragment2_to_tvshowDetailFragment2"
-            app:destination="@id/tvshowDetailFragment2" />
-    </fragment>
 </navigation>

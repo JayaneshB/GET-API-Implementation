@@ -12,8 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.netprime.MainActivity
+import com.project.netprime.R
 import com.project.netprime.adapter.TvShowAdapter
 import com.project.netprime.databinding.FragmentTvShowBinding
 import com.project.netprime.models.TvShowResponse
@@ -120,6 +122,7 @@ class TvShowFragment : Fragment(), OnClickTvShowHandler {
 
     override fun onClickTvShow(pos: TvShow) {
 
+        Navigation.findNavController(requireView()).navigate(R.id.action_tvShowFragment2_to_tvshowDetailFragment2)
     }
 
     private fun filterSearch(query: String) {

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.project.netprime.R
@@ -73,6 +74,8 @@ class TvshowDetailFragment : Fragment() {
                 Snackbar.LENGTH_SHORT
             ).show()
             wishList(date)
+
+            Navigation.findNavController(requireView()).navigate(R.id.action_tvshowDetailFragment2_to_tvShowFragment2)
 
         }
 

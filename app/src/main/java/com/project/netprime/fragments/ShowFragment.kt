@@ -28,7 +28,6 @@ class ShowFragment : Fragment() {
 
         adapter = FragmentPageAdapter(childFragmentManager, lifecycle)
 
-
         with(binding) {
             tabLayout.addTab(
                 tabLayout.newTab().setText(resources.getString(R.string.movies))
@@ -37,8 +36,6 @@ class ShowFragment : Fragment() {
                 tabLayout.newTab().setText(resources.getString(R.string.tv_shows))
             )
             binding.viewPager2.adapter = adapter
-//            (binding.viewPager2.get(0) as MovieFragment) .screenView()
-            // todo check viewpager size, do type cast and call refresh function
 
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
